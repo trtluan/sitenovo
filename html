@@ -1,0 +1,63 @@
+<html>
+<!--link de montagem passo a passo  https://www.youtube.com/watch?v=-jXfKDYJJvo -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"  content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+<link rel="stylesheet" href="styles.css"/>
+
+</head>
+<body>
+
+	<form id="chat">
+	<input type="text" name="username" placeholder="dejite seu nome "/>
+	<div class="message"></div>
+	<input type="text" name="message" placeholder="digite sua message"/>
+	<button type="submit">Enviar</button>
+	
+	
+	<script  type="text/javascript">
+
+	//passar aqui a url do site onde esta hospedado
+	var socket = io('http://localhost:3000');
+	
+	function renderMessage(message){
+	$('.message').append('<did class="message"><strong>'+ message.author +'</strong>: ' + message.message+'</div>')
+	}
+	//salva as mensagens quando atualizad a pagina
+	socket.on('previousMessage', function(message){
+	for(message of message{
+	rederMessage(message);
+	}
+	});
+	socket.on('receivedMessage', function(message){
+	renderMessage(message);
+	
+	});
+	
+	
+	$('#chat').submit(function(event){
+	event.preventDefault();
+	var author = $('input[name=username]').val();
+	var message = $('input[name=username]').val();
+	
+	if(author.length && message.length){
+	var messageObjetct = {
+	author: author,
+	message: message,
+	
+	};
+	
+	renderMessage(messageObjetct);
+	
+	socket.emit('sendMessage', messageObjetct);
+	}
+	});
+	
+	</script>
+
+</body>
+</html>
+
